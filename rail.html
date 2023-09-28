@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Railway Booking System</title>
+    <link rel="stylesheet" href="railway.css">
+</head>
+<body>
+    <div class="container">
+        <div class="buttons">
+            <button id="signup-button">Sign Up</button>
+            <button id="login-button">Login</button>
+        </div>
+        <div class="signup-section" style="display: none;">
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <button id="login-link">Login</button></p>
+        </div>
+        <div class="login-section" style="display: none;">
+            <h2>Login</h2>
+            <form id="login-form">
+                <label for="new-username">Username:</label>
+                <input type="text" id="new-username" name="new-username" required>
+                <label for="new-password">Password:</label>
+                <input type="password" id="new-password" name="new-password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <button id="signup-link">Sign Up</button></p>
+        </div>
+        <div class="booking-section" id="booking-section" style="display: none;">
+            <h2>Booking Form</h2>
+            <form id="booking-form">
+                <label for="from">From:</label>
+                <input type="text" id="from" name="from" required>
+                <label for="to">To:</label>
+                <input type="text" id="to" name="to" required>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+                <button type="submit">Book Ticket</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const signupSection = document.querySelector('.signup-section');
+        const loginSection = document.querySelector('.login-section');
+        const bookingSection = document.getElementById('booking-section');
+        const signupLink = document.getElementById('signup-link');
+        const loginLink = document.getElementById('login-link');
+        const signupButton = document.getElementById('signup-button');
+        const loginButton = document.getElementById('login-button');
+
+        signupButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            signupSection.style.display = 'block';
+            loginSection.style.display = 'none';
+            bookingSection.style.display = 'none';
+        });
+
+        loginButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            signupSection.style.display = 'none';
+            loginSection.style.display = 'block';
+            bookingSection.style.display = 'none';
+        });
+
+        signupLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            signupSection.style.display = 'block';
+            loginSection.style.display = 'none';
+            bookingSection.style.display = 'none';
+        });
+
+        loginLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            signupSection.style.display = 'none';
+            loginSection.style.display = 'block';
+            bookingSection.style.display = 'none';
+        });
+
+        const signupForm = document.getElementById('signup-form');
+        const loginForm = document.getElementById('login-form');
+        const bookingForm = document.getElementById('booking-form');
+
+        signupForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Perform your signup logic here
+            // For this example, let's assume a successful signup
+            alert('Signup successful! Please log in.');
+            signupForm.reset();
+            signupSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Perform your login validation logic here
+            // For the sake of this example, let's assume a successful login
+            loginForm.reset();
+            loginSection.style.display = 'none';
+            bookingSection.style.display = 'block';
+        });
+
+        bookingForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const from = document.getElementById('from').value;
+            const to = document.getElementById('to').value;
+            const date = document.getElementById('date').value;
+
+            // Hide booking form and display booking success section
+            bookingSection.style.display = 'none';
+            // Logic for booking
+
+            alert(`Booking successful! You have booked a ticket from ${from} to ${to} on ${date}.`);
+        });
+        const express = require('express');
+const app = express();
+const path = require('path');
+const bodyParser = require('body-parser'); // For handling form data
+
+// Set EJS as the view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serve static files (like CSS)
+app.use(express.static('public')); // Create a 'public' directory for your static files
+
+// Parse form data
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Define routes
+app.get('/', (req, res) => {
+    res.render('index'); // Render the "index.ejs" file
+});
+
+// Handle form submissions
+app.post('/signup', (req, res) => {
+    // Handle signup form data
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+
+    // Perform your signup logic here
+    // For this example, let's assume a successful signup
+
+    res.redirect('/'); // Redirect back to the homepage
+});
+
+app.post('/login', (req, res) => {
+    // Handle login form data
+    const newUsername = req.body['new-username'];
+    const newPassword = req.body['new-password'];
+
+    // Perform your login validation logic here
+    // For the sake of this example, let's assume a successful login
+
+    res.render('booking', {
+        from: '',
+        to: '',
+        date: '',
+    });
+});
+
+app.post('/book', (req, res) => {
+    // Handle booking form data
+    const from = req.body.from;
+    const to = req.body.to;
+    const date = req.body.date;
+
+    // Logic for booking
+
+    res.render('booking-success', {
+        from,
+        to,
+        date,
+    });
+});
+
+// Set the port number for your server
+const port = process.env.PORT || 3000;
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
+    </script>
+</body>
+</html>
